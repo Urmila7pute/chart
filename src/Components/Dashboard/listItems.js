@@ -16,7 +16,7 @@ export const mainListItems = (
       <ListItemIcon>
         <DashboardIcon sx={{ color: 'icon.color' }}/>
       </ListItemIcon>
-      <ListItemText primary="Dashboard" sx={{ color:'drawerMenuText.color'} } />
+      <ListItemText primary="Dashboard"  />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>

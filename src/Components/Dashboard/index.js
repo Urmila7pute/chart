@@ -1,38 +1,40 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
+// import { styled } from '@mui/material/styles';
+// import CssBaseline from '@mui/material/CssBaseline';
+// import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
+// import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
+// import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
+// import Divider from '@mui/material/Divider';
+// import IconButton from '@mui/material/IconButton';
+// import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+// import MenuIcon from '@mui/icons-material/Menu';
+// import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
+// import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './chart';
-import { Pie, PieChart, ResponsiveContainer } from 'recharts';
+// import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import PaiChart from './paiChart';
 // import Deposits from './deposite';
 import Orders from './orders';
-import { Avatar, Drawer, Menu, MenuItem } from '@mui/material';
+// import { Avatar, Drawer, Menu, MenuItem } from '@mui/material';
 import BarChart from './barChart';
 import NegativeBarChartExample from './negativeBarChart';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import Layout from '../Sidebar';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" //href="https://mui.com/"
+      >
         codeza@gmail.com
       </Link>{' '}
       {new Date().getFullYear()}
@@ -41,79 +43,79 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 191;
+// const drawerWidth = 191;
 
-const settings = [//'Profile', 'Account', 'Dashboard',
-  'Logout'];
+// const settings = [//'Profile', 'Account', 'Dashboard',
+//   'Logout'];
 
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => (
-  {
-    boxShadow: "none",
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
+// const AppBar = styled(MuiAppBar, {
+//   shouldForwardProp: (prop) => prop !== 'open',
+// })(({ theme, open }) => (
+//   {
+//     boxShadow: "none",
+//     zIndex: theme.zIndex.drawer + 1,
+//     transition: theme.transitions.create(['width', 'margin'], {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.leavingScreen,
+//     }),
+//     ...(open && {
+//       marginLeft: drawerWidth,
+//       width: `calc(100% - ${drawerWidth}px)`,
+//       transition: theme.transitions.create(['width', 'margin'], {
+//         easing: theme.transitions.easing.sharp,
+//         duration: theme.transitions.duration.enteringScreen,
+//       }),
+//     }),
+//   }));
 
-const DrawerStatic = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
+// const DrawerStatic = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+//   ({ theme, open }) => ({
+//     '& .MuiDrawer-paper': {
+//       position: 'relative',
+//       whiteSpace: 'nowrap',
+//       width: drawerWidth,
+//       transition: theme.transitions.create('width', {
+//         easing: theme.transitions.easing.sharp,
+//         duration: theme.transitions.duration.enteringScreen,
+//       }),
+//       boxSizing: 'border-box',
+//       ...(!open && {
+//         overflowX: 'hidden',
+//         transition: theme.transitions.create('width', {
+//           easing: theme.transitions.easing.sharp,
+//           duration: theme.transitions.duration.leavingScreen,
+//         }),
+//         width: theme.spacing(7),
+//         [theme.breakpoints.up('sm')]: {
+//           width: theme.spacing(9),
+//         },
+//       }),
+//     },
+//   }),
+// );
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const [anchorElUser, setAnchorElUser] = React.useState(false);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-  const handleOpenUserMenu = () => {
-    setAnchorElUser(!anchorElUser);
-  };
-  const handleCloseUserMenu = (e, setting) => {
-    console.log(e.target.innerHTML, setting)
-    if (e.target.innerHTML === 'Logout') navigate('/signIn')
-    setAnchorElUser(false);
-  };
+  // const navigate = useNavigate();
+  // const [open, setOpen] = React.useState(false);
+  // const [anchorElUser, setAnchorElUser] = React.useState(false);
+  // const toggleDrawer = () => {
+  //   setOpen(!open);
+  // };
+  // const handleOpenUserMenu = () => {
+  //   setAnchorElUser(!anchorElUser);
+  // };
+  // const handleCloseUserMenu = (e, setting) => {
+  //   console.log(e.target.innerHTML, setting)
+  //   if (e.target.innerHTML === 'Logout') navigate('/signIn')
+  //   setAnchorElUser(false);
+  // };
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+      {/* <CssBaseline />
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -240,7 +242,8 @@ export default function Dashboard() {
           <Divider sx={{ my: 1 }} />
           {secondaryListItems}
         </List>
-      </Drawer>
+      </Drawer> */}
+      <Layout/>
       <Box
         component="main"
         sx={{

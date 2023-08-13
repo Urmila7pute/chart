@@ -12,11 +12,16 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import userData from '../user.json'
+import SimpleSnackbar from '../Common/snackbar';
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
+            <Link color="inherit" //href="https://mui.com/"
+            >
                codeza@gmail.com
             </Link>{' '}
             {new Date().getFullYear()}
@@ -27,15 +32,36 @@ function Copyright(props) {
 
 export default function SignIn(props) {
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [openSnackbar, setSnakbar] = React.useState(false)
+    const [snackbarMessage, setSnakbarMessage] = React.useState('');
+    const [severity, setSeverity] = React.useState("");
+
+  const handleClickShowHidePassword = () => setShowPassword(!showPassword);
     const handleSubmitSignIn = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        navigate("/dashboard")
+        const findObject = userData.find(ele=>ele.email===data.get('email'))
+        if(findObject && Object.keys(findObject)?.length > 0){
+            if(findObject.password===data.get('password')){  navigate("/dashboard") }
+            else { 
+                setSnakbarMessage("Wrong Credentials")
+                setSnakbar(true)
+                setSeverity('error')
+            }
+        }else{
+            setSnakbarMessage("Email not present, Please sign up")
+            setSnakbar(true)
+            setSeverity('error')
+        }
+        
     };
+
+    const setFlagClose =()=>{
+        setSnakbarMessage("")
+        setSnakbar(false)
+        setSeverity('')
+    }
 
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
@@ -88,9 +114,22 @@ export default function SignIn(props) {
                             fullWidth
                             name="password"
                             label="Password"
-                            type="password"
+                            type={showPassword?'text':"password"}
                             id="password"
                             autoComplete="current-password"
+                            InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="toggle password visibility"
+                                      onClick={handleClickShowHidePassword}
+                                      onMouseDown={handleClickShowHidePassword}
+                                    >
+                                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              }}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -120,6 +159,7 @@ export default function SignIn(props) {
                     </Box>
                 </Box>
             </Grid>
+            <SimpleSnackbar open={openSnackbar} message={snackbarMessage} severity={severity} setFlagClose={setFlagClose}/>
         </Grid>
     );
 }

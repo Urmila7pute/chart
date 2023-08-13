@@ -6,7 +6,8 @@ import ForgotPassword from './Components/Login/forgotPassword';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 import Dashboard from './Components/Dashboard';
-// const defaultTheme = createTheme();
+import InProgressPage from './Components/InProgressPage';
+
 const defaultTheme = createTheme({
   palette: {
     secondary: {
@@ -15,20 +16,21 @@ const defaultTheme = createTheme({
     primary: {
       main: '#b66dff'
     },
-    icon:{
+    icon: {
       color: '#bba8bf'
     },
-    h1:{
-      color:'#b66dff'
+    h1: {
+      color: '#b66dff'
     },
-    backgroundColorMain:{
-     backgroundColor: "#f2edf3"
+    backgroundColorMain: {
+      backgroundColor: "#f2edf3"
     },
-    drawerMenuText:{
+    drawerMenuText: {
       color: "#3e4b5b"
     }
   },
 });
+
 function App() {
   return (
     <div className="App">
@@ -40,6 +42,11 @@ function App() {
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/orders" element={<InProgressPage />} />
+            <Route path="/customers" element={<InProgressPage />} />
+            <Route path="/reports" element={<InProgressPage />} />
+            <Route path="/integrations" element={<InProgressPage />} />
+            <Route path="/currentmonth" element={<InProgressPage />} />
             <Route path="/about" element={<Dashboard />} />
             <Route path="*" element={<h1> No Page Found</h1>} />
 

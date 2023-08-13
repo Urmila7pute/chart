@@ -3,16 +3,31 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import axios from 'axios'
+import userData from "../user.json"
+import SimpleSnackbar from '../Common/snackbar';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [allfileData, setAllFileData] = React.useState(userData)
+    const [openSnackbar, setSnakbar] = React.useState(false)
+    const [snackbarMessage, setSnakbarMessage] = React.useState('');
+    const [userAddedSuccess, setUserAddedSuccess] =React.useState(false);
+    const [severity, setSeverity] = React.useState("");
+    const navigate = useNavigate();
+
+  const handleClickShowHidePassword = () => setShowPassword(!showPassword);
     const handleSubmitSignUp = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -20,7 +35,38 @@ export default function SignUp() {
             email: data.get('email'),
             password: data.get('password'),
         });
+        const jsonData={
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
+            email: data.get('email'),
+        password: data.get('password')
+        }
+        allfileData.push(jsonData)
+        saveJson(allfileData)
     };
+
+    const saveJson =async(users) =>{
+        const url = `http://localhost:8000/signup`
+        try {
+            const res = await axios.post(url, users)
+            console.log(res)
+            document.getElementById("signupForm").reset();
+            setSnakbarMessage("Sign Up successful")
+            setSnakbar(true)
+            setSeverity('success')
+            setUserAddedSuccess(true)
+        } catch (error) {
+            console.log('error', error)
+        }
+        
+
+    }
+
+    const setFlagClose =()=>{
+        setSnakbarMessage("")
+        setSnakbar(false)
+        setSeverity('')
+    }
 
     return (
         <Grid container component="main" sx={{ height: '100vh' }}>
@@ -56,7 +102,22 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmitSignUp} sx={{ mt: 1 }}>
+                   { userAddedSuccess?
+                    <Box sx={{ mt: 1 }}>
+                    <Grid item xs={12}>
+                                User Added successful please sign in
+                            </Grid>
+                            <Button
+                            onClick={()=>{navigate('/signIn')}}
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+                            </Box>
+                    :
+                    <Box component="form" id="signupForm" noValidate onSubmit={handleSubmitSignUp} sx={{ mt: 1 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -95,17 +156,30 @@ export default function SignUp() {
                                     fullWidth
                                     name="password"
                                     label="Password"
-                                    type="password"
+                                    type={showPassword?"text":"password"}
                                     id="password"
                                     autoComplete="new-password"
+                                    InputProps={{
+                                        endAdornment: (
+                                          <InputAdornment position="end">
+                                            <IconButton
+                                              aria-label="toggle password visibility"
+                                              onClick={handleClickShowHidePassword}
+                                              onMouseDown={handleClickShowHidePassword}
+                                            >
+                                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                          </InputAdornment>
+                                        ),
+                                      }}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <FormControlLabel
                                     control={<Checkbox value="allowExtraEmails" color="primary" />}
                                     label="I want to receive inspiration, marketing promotions and updates via email."
                                 />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                         <Button
                             type="submit"
@@ -122,9 +196,11 @@ export default function SignUp() {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </Box>
+                    </Box>}
+                   
                 </Box>
             </Grid>
+            <SimpleSnackbar open={openSnackbar} message={snackbarMessage} severity={severity} setFlagClose={setFlagClose}/>
         </Grid>
     );
 }

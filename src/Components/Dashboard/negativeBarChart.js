@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import {
     BarChart,
     Bar,
-    Cell,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -57,13 +56,13 @@ const data = [
         amt: 2100,
     },
 ];
-const COLORS = [
-    { start: "#0088FE", end: "#98CFFE" },
-    { start: "#1BCFB4", end: "#8FFFFF" },
-    { start: '#FED713', end: "#FFFF5E" },
-    { start: "#FE6382", end: "#FEAFBF" },
-    { start: "#da9d35", end: "#e96935" },
-];
+// const COLORS = [
+//     { start: "#0088FE", end: "#98CFFE" },
+//     { start: "#1BCFB4", end: "#8FFFFF" },
+//     { start: '#FED713', end: "#FFFF5E" },
+//     { start: "#FE6382", end: "#FEAFBF" },
+//     { start: "#da9d35", end: "#e96935" },
+// ];
 export default class NegativeBarChartExample extends PureComponent {
 
     render() {
