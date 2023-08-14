@@ -11,6 +11,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import userData from '../user.json'
+import SimpleSnackbar from "../Common/snackbar";
+import axios from 'axios'
 
 function Copyright(props) {
   return (
@@ -38,6 +41,10 @@ export default function ForgotPassword() {
   const [setNewPassword, setNewPasswordSet] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const [email, setEmail] = React.useState("")
+  const [openSnackbar, setSnakbar] = React.useState(false)
+  const [snackbarMessage, setSnakbarMessage] = React.useState('');
+  const [severity, setSeverity] = React.useState("");
 
   const handleClickShowHidePassword = () => setShowPassword(!showPassword);
 
@@ -51,12 +58,16 @@ export default function ForgotPassword() {
       email: data.get("email"),
       code: data.get("code"),
     });
-    for (var key of data.keys()) {
-      // here you can add filtering conditions
-      data.delete(key);
+
+    // for (var key of data.keys()) {
+    //   // here you can add filtering conditions
+    //   data.delete(key);
+    // }
+    if(data.get("code")==3393){
+      setSendCodeStatus(false);
+      setNewPasswordSet(true);
+      setEmail(data.get("email"))
     }
-    setSendCodeStatus(false);
-    setNewPasswordSet(true);
   };
 
   const handleSendEmail = (event) => {
@@ -70,13 +81,46 @@ export default function ForgotPassword() {
   const handleChangePassword = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data);
+    console.log(email);
 
-    console.log({
+    const json={
       newPassword: data.get("newPassword"),
       confirmPassword: data.get("confirmPassword"),
-    });
+    }
+    if(json.newPassword===json.confirmPassword){
+      const newUserData = userData.map((ele)=> ({...ele,password:ele.email===email?json.newPassword:ele.password}))
+      console.log('newUserData',newUserData, userData, email)
+      saveJson(newUserData)
+    }else{
+      setSnakbarMessage("New password and Confirm password should be same")
+                setSnakbar(true)
+                setSeverity('error')
+    }
   };
+
+  const saveJson =async(users) =>{
+    const url = `http://localhost:8000/changePassword`
+    try {
+        const res = await axios.post(url, users)
+        console.log(res)
+        document.getElementById("changePasswordForm").reset();
+        setSnakbarMessage("Password Changed successful")
+        setSnakbar(true)
+        setSeverity('success')
+        // setUserAddedSuccess(true)
+    } catch (error) {
+        console.log('error', error)
+    }
+    
+
+}
+
+
+  const setFlagClose =()=>{
+    setSnakbarMessage("")
+    setSnakbar(false)
+    setSeverity('')
+}
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -117,11 +161,23 @@ export default function ForgotPassword() {
           </Typography>
           {setNewPassword ? (
             <Box
-              component="form1"
-              noValidate
+              component="form"
+              // noValidate
               onSubmit={handleChangePassword}
               sx={{ mt: 1 }}
+              id="changePasswordForm"
             >
+               <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                disabled
+                value={email}
+              />
               <TextField
                 margin="normal"
                 required
@@ -195,7 +251,7 @@ export default function ForgotPassword() {
           ) : (
             <Box
               component="form"
-              noValidate
+              // noValidate
               onSubmit={sendCodeStatus ? handleSubmitCode : handleSendEmail}
               sx={{ mt: 1 }}
             >
@@ -209,7 +265,7 @@ export default function ForgotPassword() {
                 autoComplete="email"
                 autoFocus
               />
-              <TextField
+              {sendCodeStatus && <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -219,7 +275,8 @@ export default function ForgotPassword() {
                 id="code"
                 autoComplete="code"
                 sx={{ visibility: sendCodeStatus ? "visible" : "hidden" }}
-              />
+                // autoFocus
+              />}
 
               <Button
                 type="submit"
@@ -241,6 +298,7 @@ export default function ForgotPassword() {
           )}
         </Box>
       </Grid>
+      <SimpleSnackbar open={openSnackbar} message={snackbarMessage} severity={severity} setFlagClose={setFlagClose}/>
     </Grid>
   );
 }

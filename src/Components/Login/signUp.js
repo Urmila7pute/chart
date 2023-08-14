@@ -31,18 +31,21 @@ export default function SignUp() {
     const handleSubmitSignUp = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        const jsonData={
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get('email'),
-        password: data.get('password')
+        const findEmailPresent = userData.find((ele)=> ele.email===data.get('email'))
+        if(findEmailPresent){
+            setSnakbarMessage("Email id is allready present, Please sign in")
+            setSnakbar(true)
+            setSeverity('error')
+        }else{
+            const jsonData={
+                firstName: data.get("firstName"),
+                lastName: data.get("lastName"),
+                email: data.get('email'),
+                password: data.get('password')
+            }
+            allfileData.push(jsonData)
+            saveJson(allfileData)
         }
-        allfileData.push(jsonData)
-        saveJson(allfileData)
     };
 
     const saveJson =async(users) =>{

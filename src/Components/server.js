@@ -39,6 +39,14 @@ app.post('/signup', async(req, res, next)=>{
     })
 })
 
+app.post('/changePassword', async(req, res, next)=>{
+    const requestBody = JSON.stringify(req.body)
+    await WriteTextToFile(requestBody)
+    res.status(200).send({
+        message: "Sign up success"
+    })
+})
+
 //404 route for server
 app.use((req,res, next)=>res.status(404).send({
     message: "Could not find specific route that was requested"
