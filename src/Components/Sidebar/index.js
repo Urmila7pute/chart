@@ -91,7 +91,10 @@ export default function Layout() {
     };
     const handleCloseUserMenu = (e, setting) => {
         console.log(e.target.innerHTML, setting)
-        if (e.target.innerHTML === 'Logout') navigate('/signIn')
+        if (e.target.innerHTML === 'Logout'){
+            localStorage.clear();
+            navigate('/signIn')
+    }
         setAnchorElUser(false);
     };
 

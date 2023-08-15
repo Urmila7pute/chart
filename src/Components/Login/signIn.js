@@ -43,7 +43,10 @@ export default function SignIn(props) {
         const data = new FormData(event.currentTarget);
         const findObject = userData.find(ele=>ele.email===data.get('email'))
         if(findObject && Object.keys(findObject)?.length > 0){
-            if(findObject.password===data.get('password')){  navigate("/dashboard") }
+            if(findObject.password===data.get('password')){ 
+                localStorage.setItem('loggedIn', true)
+                 navigate("/dashboard")
+            }
             else { 
                 setSnakbarMessage("Wrong Credentials")
                 setSnakbar(true)

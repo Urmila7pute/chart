@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 import Dashboard from './Components/Dashboard';
 import InProgressPage from './Components/InProgressPage';
+import { PrivateRoute } from './Components/Common/privateRoute';
 
 const defaultTheme = createTheme({
   palette: {
@@ -41,13 +42,13 @@ function App() {
             <Route path="/signIn" element={<SignIn />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/orders" element={<InProgressPage />} />
-            <Route path="/customers" element={<InProgressPage />} />
-            <Route path="/reports" element={<InProgressPage />} />
-            <Route path="/integrations" element={<InProgressPage />} />
-            <Route path="/currentmonth" element={<InProgressPage />} />
-            <Route path="/about" element={<Dashboard />} />
+            <Route path="/dashboard" element={<PrivateRoute Component={Dashboard}/>} />
+            <Route path="/orders" element={<PrivateRoute Component={InProgressPage} />} />
+            <Route path="/customers" element={<PrivateRoute Component={InProgressPage} />} />
+            <Route path="/reports" element={<PrivateRoute Component={InProgressPage} />} />
+            <Route path="/integrations" element={<PrivateRoute Component={InProgressPage} />} />
+            <Route path="/currentmonth" element={<PrivateRoute Component={InProgressPage} />} />
+            <Route path="/about" element={<PrivateRoute Component={Dashboard} />} />
             <Route path="*" element={<h1> No Page Found</h1>} />
 
           </Routes>
